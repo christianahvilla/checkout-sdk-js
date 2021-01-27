@@ -33,7 +33,7 @@ export default class MasterpassButtonStrategy implements CheckoutButtonStrategy 
                     throw new MissingDataError(MissingDataErrorType.MissingPaymentMethod);
                 }
 
-                return this._masterpassScriptLoader.load(paymentMethod.config.testMode);
+                return this._masterpassScriptLoader.load(paymentMethod.config.testMode, paymentMethod.initializationData.checkoutId);
             })
             .then(masterpass => {
                 this._masterpassClient = masterpass;
@@ -61,7 +61,7 @@ export default class MasterpassButtonStrategy implements CheckoutButtonStrategy 
         const button = document.createElement('input');
 
         button.type = 'image';
-        button.src = 'https://static.masterpass.com/dyn/img/btn/global/mp_chk_btn_160x037px.svg';
+        button.src = 'https://sandbox.src.mastercard.com/assets/img/btn/src_chk_btn_126x030px.svg?locale=en_us&paymentmethod=visa&checkoutid=b68e5ebe928a45bca331ac8317e20ea8';
         buttonContainer.appendChild(button);
 
         button.addEventListener('click', this._handleWalletButtonClick);
@@ -84,7 +84,7 @@ export default class MasterpassButtonStrategy implements CheckoutButtonStrategy 
 
         return {
             checkoutId: paymentMethod.initializationData.checkoutId,
-            allowedCardTypes: paymentMethod.initializationData.allowedCardTypes,
+            allowedCardTypes:  ['amex', 'visa', 'master'],  // paymentMethod.initializationData.allowedCardTypes,
             amount: checkout.cart.cartAmount.toString(),
             currency: checkout.cart.currency.code,
             cartId: checkout.cart.id,

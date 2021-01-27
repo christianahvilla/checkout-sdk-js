@@ -41,7 +41,7 @@ export default class MasterpassCustomerStrategy implements CustomerStrategy {
 
                 const payload = {
                     checkoutId: this._paymentMethod.initializationData.checkoutId,
-                    allowedCardTypes: this._paymentMethod.initializationData.allowedCardTypes,
+                    allowedCardTypes: ['amex', 'visa', 'master'], // this._paymentMethod.initializationData.allowedCardTypes,
                     amount: cart.cartAmount.toString(),
                     currency: cart.currency.code,
                     cartId: cart.id,
@@ -49,7 +49,7 @@ export default class MasterpassCustomerStrategy implements CustomerStrategy {
                     callbackUrl: getCallbackUrl('checkout'),
                 };
 
-                return this._masterpassScriptLoader.load(this._paymentMethod.config.testMode)
+                return this._masterpassScriptLoader.load(this._paymentMethod.config.testMode, this._paymentMethod.initializationData.checkoutId)
                     .then(Masterpass => {
                         this._signInButton = this._createSignInButton(container);
 
@@ -101,7 +101,7 @@ export default class MasterpassCustomerStrategy implements CustomerStrategy {
         const button = document.createElement('input');
 
         button.type = 'image';
-        button.src = 'https://static.masterpass.com/dyn/img/btn/global/mp_chk_btn_160x037px.svg';
+        button.src = 'https://sandbox.src.mastercard.com/assets/img/btn/src_chk_btn_126x030px.svg?locale=en_us&paymentmethod=visa,amex,master&checkoutid=b68e5ebe928a45bca331ac8317e20ea8';
         container.appendChild(button);
 
         return button;
